@@ -1,5 +1,6 @@
-FROM l3iggs/archlinux
-MAINTAINER l3iggs <l3iggs@live.com>
+#ARG MYARCH
+FROM yhfu/archlinux-$MYARCH
+MAINTAINER yhfu <yhfudev@gmail.com>
 
 # upldate package list
 RUN pacman -Sy
@@ -7,7 +8,7 @@ RUN pacman -Sy
 # install apache
 RUN pacman -S --noconfirm --needed apache
 # this folder is normally created by the systemd apache service which we won't be using
-RUN mkdir /run/httpd
+RUN mkdir -p /run/httpd
 RUN sed -i '$a ServerName ${HOSTNAME}' /etc/httpd/conf/httpd.conf
 
 # install php
@@ -28,7 +29,7 @@ RUN sed -i '$a SSLProtocol All -SSLv2 -SSLv3' /etc/httpd/conf/extra/httpd-ssl.co
 ENV SUBJECT /C=US/ST=CA/L=CITY/O=ORGANIZATION/OU=UNIT/CN=localhost
 ADD genSSLKey.sh /etc/httpd/conf/genSSLKey.sh
 RUN /etc/httpd/conf/genSSLKey.sh
-RUN mkdir /https
+RUN mkdir -p /https
 RUN ln -s /etc/httpd/conf/server.crt /https/server.crt
 RUN ln -s /etc/httpd/conf/server.key /https/server.key
 RUN sed -i 's,/etc/httpd/conf/server.crt,/https/server.crt,g' /etc/httpd/conf/extra/httpd-ssl.conf
@@ -84,7 +85,7 @@ RUN sed -i 's,;extension=pdo_sqlite.so,extension=pdo_sqlite.so,g' /etc/php/php.i
 
 # for mariadb (mysql) database
 # here is a hack to prevent an error during install because of missing systemd
-RUN ln -s /usr/bin/true /usr/bin/systemd-tmpfiles
+#RUN ln -s /usr/bin/true /usr/bin/systemd-tmpfiles
 RUN pacman -S --noconfirm --needed mariadb
 RUN rm /usr/bin/systemd-tmpfiles
 RUN pacman -S --noconfirm --needed perl-dbd-mysql
