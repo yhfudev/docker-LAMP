@@ -1,9 +1,9 @@
 #ARG MYARCH
-FROM yhfu/archlinux-$MYARCH
+FROM yhfudev/docker-archlinux
 MAINTAINER yhfu <yhfudev@gmail.com>
 
 # upldate package list
-RUN pacman -Sy
+RUN pacman -Syy
 
 # install apache
 RUN pacman -S --noconfirm --needed apache
