@@ -87,7 +87,7 @@ RUN sed -i 's,;extension=pdo_sqlite.so,extension=pdo_sqlite.so,g' /etc/php/php.i
 # here is a hack to prevent an error during install because of missing systemd
 #RUN ln -s /usr/bin/true /usr/bin/systemd-tmpfiles
 RUN pacman -S --noconfirm --needed mariadb
-RUN rm /usr/bin/systemd-tmpfiles
+RUN rm -f /usr/bin/systemd-tmpfiles
 RUN pacman -S --noconfirm --needed perl-dbd-mysql
 RUN sed -i 's,;extension=pdo_mysql.so,extension=pdo_mysql.so,g' /etc/php/php.ini
 RUN sed -i 's,;extension=mysql.so,extension=mysql.so,g' /etc/php/php.ini
